@@ -6,11 +6,14 @@ module.exports = api;
 api.post('/sms-updates', function(req) {
   // This logic is just here to handle if a location was not included with your
   // tracking number that you are requesting.
-  var trackingLocation = '';
-  if (req.body.tracking_status.location) {
-    if (req.body.tracking_status.location.city) {
-      trackingLocation = req.body.tracking_status.location.city + ', ' |
-          req.body.tracking_status.location.state
+	var body = req.body,
+	    trackingStatus = body.tracking_status,
+      trackingLocation = '';
+      
+  if (trackingStatus.location) {
+    if (trackingStatus.location.city) {
+      trackingLocation = trackingStatus.location.city + ', ' |
+          trackingStatus.location.state
     }
   } else {
     trackingLocation = 'UNKNOWN';
@@ -20,8 +23,9 @@ api.post('/sms-updates', function(req) {
       .sendMessage({
         to: '+1-TEST_NUMBER',      // This should be your destination number
         from: '+1-TWILIO_NUMBER',  // This is your Twilio number in your account
-        body: 'Tracking #: ' + req.body.tracking_number + '\nStatus: ' +
-            req.body.tracking_status.status + '\nLocation: ' + trackingLocation
+        body: 'Tracking #: ' + body.tracking_number +
+              '\nStatus: ' + trackingStatus.status +
+              '\nLocation: ' + trackingLocation
       })
       .then(function(
           success) {  // We are using a promise here to help Claudiajs
