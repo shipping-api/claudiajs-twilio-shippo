@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
 		"create": "claudia create --name twilio-shippo --region us-west-2 --api-module app --profile claudia",
+    "update": "claudia update --profile claudia",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Richard Moot",
