@@ -5,9 +5,13 @@ To get started and provide a little context, we’re going to go through how to 
 Now, I know what you’re thinking, this sounds pretty complicated and requires a lot of manual set up and repeated uploading of JavaScript files to AWS, but you’d be wrong. We’re going to use ClaudiaJS to do a lot of the heavy lifting on this for us, because I’m all about writing less code to do more.
 
 Things you'll want before getting started with this tutorial:
+
 * [Twilio Account](https://www.twilio.com/try-twilio)
+
 > You'll need your Account SID and Auth Token from this (you can find these both in your dash after signing up)
+
 * [Shippo Account](https://goshippo.com/register)
+
 > You just need to plug in your API endpoint URL to the [webhooks](https://goshippo.com/docs/webhooks) area to have it work.
 
 You can get ClaudiaJS by just installing it globally on your machine using:
