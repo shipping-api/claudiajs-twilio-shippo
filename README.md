@@ -1,6 +1,6 @@
-# Using AWS' Lambda & API Gateway to Send SMS Tracking Updates with Shippo & Twilio
+# Using AWS Lambda & API Gateway to Send Shipment Tracking Updates via SMS with Shippo & Twilio
 
-To get started and provide a little context, we’re going to go through how to create an AWS Lambda function that will trigger whenever Shippo posts to our AWS API Gateway Endpoint. Inside of the Lambda function, we’re going to call out to Twilio to send an SMS update with our tracking info provided by Shippo’s webhook.
+In this project, we’re going to create an AWS Lambda function that will trigger whenever Shippo pushes an update about a shipment to our AWS API Gateway Endpoint. Inside of the Lambda function, we’re going to call out to Twilio to send an SMS update with our tracking info provided by Shippo’s webhook.
 
 Now, I know what you’re thinking, this sounds pretty complicated and requires a lot of manual set up and repeated uploading of JavaScript files to AWS, but you’d be wrong. We’re going to use ClaudiaJS to do a lot of the heavy lifting on this for us, because I’m all about writing less code to do more.
 
@@ -28,7 +28,7 @@ You can speed up initializing your project using the following command, which ge
 
 `npm init --yes`
 
-Now that we have our `package.json` created, we can start installing some dependencies we'll need for our function to work. We'll be needing ClaudiaJS' API Builder and Twilio's node library to get up and running here.
+Now that we have our `package.json` created, we can start installing dependencies we'll need for our function to work. We'll need ClaudiaJS' API Builder and Twilio's node library to get up and running.
 
 `npm install -S twilio claudia-api-builder`
 
@@ -45,7 +45,7 @@ var ApiBuilder = require('claudia-api-builder'),
 
 From here, we want to create the endpoint that we'll be putting into [Shippo's webhook](https://goshippo.com/docs/webhooks) interface for capturing all of our tracking updates. Every time Shippo detects a new update to the status of a tracking number that we have POSTed to them, Shippo will send out updates to our API endpoint that we give to them.
 
-We'll want to be sure that we export our function so that Claudia can package everything up to be deployed to AWS for us. We can do this by adding the following to our `app.js` file:
+You'll want to be sure to export our function so that Claudia can package everything up to be deployed to AWS for us. We can do this by adding the following to our `app.js` file:
 ```javascript
 // Reminder: This should be appended below the code found above
 module.exports = api;
@@ -55,7 +55,7 @@ api.post('sms-updates', function(req){
 });
 ```
 
-We are creating a POST endpoint, since Shippo will be POSTing the our tracking updates to us. We'll then parse the data to relay over to Twilio to send out our SMS messages.
+We are creating a POST endpoint, since Shippo will be POSTing the tracking updates to us. We'll then parse the data to relay over to Twilio to send out our SMS messages.
 
 First, lets parse the body of the message that Shippo has sent to us. We'll set up a few variable to prevent repeating ourselves, and we'll add some logic in there to handle if there is no location provided with our tracking update.
 
@@ -120,7 +120,7 @@ api.post('/sms-updates', function(req) {
 
 One thing to note about the above code, is that we're using a Promise to resolve the function. This is done because ClaudiaJS will look for whether you're using a Promise in your Lambda function and be sure to let it continue running until the Promise resolves (or your function times out, which is around 3 seconds by default in AWS).
 
-Now that we have a composed Lambda function and Gateway endpoint, we can deploy this all to AWS using our ClaudiaJS CLI tool. If you setup your AWS Credentials at ``~/.aws/credentials` (as specified at [https://claudiajs.com/tutorials/installing.html](https://claudiajs.com/tutorials/installing.html)), You can just use the following command:
+Now that we have a composed Lambda function and Gateway endpoint, we can deploy this all to AWS using our ClaudiaJS CLI tool. If you setup your AWS Credentials at `~/.aws/credentials` (as specified at [https://claudiajs.com/tutorials/installing.html](https://claudiajs.com/tutorials/installing.html)), You can just use the following command:
 
 `claudia create --name twilio-shippo --region us-west-2 --api-module app --profile claudia`
 
@@ -157,4 +157,4 @@ After pasting this into the URL field in Shippo, make sure that the dropdown und
 
 Now you can get SMS updates for all numbers that you post to Shippo automatically without having to provision any servers, and you only pay when you are receiving updates using Lambda and API Gateway with AWS. You could even take it a step further and include phone numbers for SMS updates in the `metadata` field when POSTing to Shippo and parse that out to dynamically send SMS updates to customers.
 
-You can find out most information about Shippo and how to use our API to improve your shipping experience at [https://goshippo.com/docs](https://goshippo.com/docs). We're looking forward to seeing what you can build with our API.
+You can find out most information about Shippo and how to use their shipping API to improve your shipping experience at [https://goshippo.com/docs](https://goshippo.com/docs). 
