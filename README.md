@@ -1,8 +1,10 @@
-# Using AWS Lambda & API Gateway to Send Shipment Tracking Updates via SMS with Shippo & Twilio
+# Use AWS Lambda & API Gateway to Send Shipment Tracking Updates via SMS with Shippo & Twilio
 
-In this project, we’re going to create an AWS Lambda function that will trigger whenever Shippo pushes an update about a shipment to our AWS API Gateway Endpoint. Inside of the Lambda function, we’re going to call out to Twilio to send an SMS update with our tracking info provided by Shippo’s webhook.
+I know that its hard to take an API and integrate it into your system in a reliable way. That is why its great to leverage AWS Lambda and AWS API Gateway to create an entire new service without having to provision resources.
 
-Now, I know what you’re thinking, this sounds pretty complicated and requires a lot of manual set up and repeated uploading of JavaScript files to AWS, but you’d be wrong. We’re going to use ClaudiaJS to do a lot of the heavy lifting on this for us, because I’m all about writing less code to do more.
+This project focuses on taking two API's, Twilio and Shippo, and creating a service that can automatically send sms shipment tracking updates. Twilio will provide the ability to send the SMS update, while Shippo will push the tracking updates to our API Gateway webhook url.
+
+Now, I know what you’re thinking, this sounds pretty complicated and requires a lot of manual set up and repeated uploading of files to AWS, but you’d be wrong. We’re going to use ClaudiaJS to do a lot of the heavy lifting on this for us, because I’m all about writing less code to do more.
 
 Things you'll want before getting started with this tutorial:
 
@@ -105,7 +107,7 @@ api.post('/sms-updates', function(req) {
               '\nStatus: ' + trackingStatus.status +
               '\nLocation: ' + trackingLocation
       })
-      .then(function(success) {  
+      .then(function(success) {
         // We are using a promise here to help Claudiajs
         // make sure the request finishes executing, otherwise
         // our function will exit before it we're successfully send our
@@ -157,4 +159,4 @@ After pasting this into the URL field in Shippo, make sure that the dropdown und
 
 Now you can get SMS updates for all numbers that you post to Shippo automatically without having to provision any servers, and you only pay when you are receiving updates using Lambda and API Gateway with AWS. You could even take it a step further and include phone numbers for SMS updates in the `metadata` field when POSTing to Shippo and parse that out to dynamically send SMS updates to customers.
 
-You can find out most information about Shippo and how to use their shipping API to improve your shipping experience at [https://goshippo.com/docs](https://goshippo.com/docs). 
+You can find out most information about Shippo and how to use their shipping API to improve your shipping experience at [https://goshippo.com/docs](https://goshippo.com/docs).
