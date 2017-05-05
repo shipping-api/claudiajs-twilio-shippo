@@ -1,10 +1,10 @@
-# Use AWS Lambda & API Gateway to Send Shipment Tracking Updates via SMS with Shippo & Twilio
+# Use AWS Lambda & API Gateway to Connect APIs
 
-I know that its hard to take an API and integrate it into your system in a reliable way. That is why its great to leverage AWS Lambda and AWS API Gateway to create an entire new service without having to provision resources.
+As many developers know, it can be hard to integrate 3rd party API into your systems in a reliable way. An interesting solution to this problem can be to leverage AWS Lambda and AWS API Gateway to create an entire new service without having to provision resources. This can be especially interesting if you just need to pass messages between different systems without requiring direct interaction with your main application.
 
-This project focuses on taking two API's, Twilio and Shippo, and creating a service that can automatically send sms shipment tracking updates. Twilio will provide the ability to send the SMS update, while Shippo will push the tracking updates to our API Gateway webhook url.
+You may be thinking, this sounds pretty complicated and requires a lot of manual set up and repeated uploading of files to AWS, but you’d be wrong. We’re going to use ClaudiaJS to do a lot of the heavy lifting on this for us, because we’re all about writing less code to do more.
 
-Now, I know what you’re thinking, this sounds pretty complicated and requires a lot of manual set up and repeated uploading of files to AWS, but you’d be wrong. We’re going to use ClaudiaJS to do a lot of the heavy lifting on this for us, because I’m all about writing less code to do more.
+This sample project focuses on taking two API's, Twilio and Shippo, and creating a service that can automatically send sms shipment tracking updates. Twilio will provide the ability to send the SMS message, while Shippo will push the tracking updates to our API Gateway webhook url.
 
 Things you'll want before getting started with this tutorial:
 
@@ -12,7 +12,7 @@ Things you'll want before getting started with this tutorial:
 
 > You'll need your Account SID and Auth Token from this (you can find these both in your dash after signing up)
 
-* [Shippo Account](https://goshippo.com/register)
+* [Shippo Account](https://goshippo.com)
 
 > You just need to plug in your API endpoint URL to the [webhooks](https://goshippo.com/docs/webhooks) area to have it work.
 
@@ -159,4 +159,4 @@ After pasting this into the URL field in Shippo, make sure that the dropdown und
 
 Now you can get SMS updates for all numbers that you post to Shippo automatically without having to provision any servers, and you only pay when you are receiving updates using Lambda and API Gateway with AWS. You could even take it a step further and include phone numbers for SMS updates in the `metadata` field when POSTing to Shippo and parse that out to dynamically send SMS updates to customers.
 
-You can find out most information about Shippo and how to use their shipping API to improve your shipping experience at [https://goshippo.com/docs](https://goshippo.com/docs).
+You can find out most information about Shippo and how to use their [shipping API](https://goshippo.com/features/developers/) to improve your shipping experience at [https://goshippo.com/docs](https://goshippo.com/docs).
