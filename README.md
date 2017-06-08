@@ -49,7 +49,10 @@ From here, we want to create the endpoint that we'll be putting into [Shippo's w
 
 You'll want to be sure to export our function so that Claudia can package everything up to be deployed to AWS for us. We can do this by adding the following to our `app.js` file:
 ```javascript
-// Reminder: This should be appended below the code found above
+var ApiBuilder = require('claudia-api-builder'),
+    api = new ApiBuilder(),
+    twilio = require('twilio')('TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN');
+
 module.exports = api;
 
 api.post('sms-updates', function(req){
@@ -65,18 +68,14 @@ First, lets parse the body of the message that Shippo has sent to us. We'll set 
 api.post('/sms-updates', function(req) {
   var body = req.body,
       trackingStatus = body.tracking_status,
-      trackingLocation = '';
+      trackingLocation = 'UNKNOWN';
 
-  if (trackingStatus.location) {
-    if (trackingStatus.location.city) {
-      trackingLocation = trackingStatus.location.city + ', ' |
-          trackingStatus.location.state
-    }
-  } else {
-    trackingLocation = 'UNKNOWN';
+  if (trackingStatus.location && trackingStatus.location.city) {
+    trackingLocation =
+        trackingStatus.location.city + ', ' + trackingStatus.location.state
   }
 
-  return; // Don't worry, we'll actually be returning something here later
+  // Next we’ll implement our call to Twilio
 });
 ```
 Now that we have our logic built for handling the body of the response and safely handle when we don't get a location with our tracking status, we can dig into sending a formatted SMS using Twilio.
@@ -88,15 +87,11 @@ Here is what it looks like once we add sending our message:
 api.post('/sms-updates', function(req) {
   var body = req.body,
       trackingStatus = body.tracking_status,
-      trackingLocation = '';
+      trackingLocation = 'UNKNOWN';
 
-  if (trackingStatus.location) {
-    if (trackingStatus.location.city) {
-      trackingLocation = trackingStatus.location.city + ', ' |
-          trackingStatus.location.state
-    }
-  } else {
-    trackingLocation = 'UNKNOWN';
+  if (trackingStatus.location && trackingStatus.location.city) {
+    trackingLocation =
+        trackingStatus.location.city + ', ' + trackingStatus.location.state
   }
 
   return twilio
